@@ -1,0 +1,16 @@
+%% LASSO Function returning theta
+function thetaLasso= lassoFunction(X,Y,delta)
+thetaLasso=zeros(size(X,2),1);
+for i=1:1000
+    for j=1:size(X,2),
+        A= 2 * X(:,j)' * X(:,j);
+        C= 2 * X(:,j)' * (Y - (X(:,1:end~= j) * thetaLasso(1:end~=j,:))); 
+        if C < - (delta^2)
+            thetaLasso(j,:)= (C + delta ^ 2)/ A;
+        else if C > - (delta ^2) && C < delta ^ 2
+                thetaLasso(j,:)= 0;
+            else thetaLasso(j,:)= (C - delta ^ 2) / A;
+            end
+        end
+    end
+end
