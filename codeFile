@@ -1,0 +1,87 @@
+%%% I ignored the crossterms while doing the below high order transformation
+
+% addpath('G:\Dataset');
+% X= load('G:\Dataset\ex2x.dat');
+% X=[ones(size(X,1),1) X];
+% Y= load('G:\Dataset\ex2y.dat');
+% % No of training samples 
+% m= size(X,1);
+
+%% Second Order
+% XSecond= [X X(:,2).^2];
+% thetaSecond= (XSecond' * XSecond)\ XSecond' * Y;
+% % % training error
+% YhatSecond= XSecond*thetaSecond;
+% RMSErrorSecond=  sqrt(1/m * sum((YhatSecond - Y).^2));
+% costLinearSecond= (Y-YhatSecond)' * (Y - YhatSecond); % Cost function \ Squared Error
+
+% plot(X(:,2),Y, 'O')
+% hold on;
+% plot(X,YhatSecond)
+
+%% Third Order
+% XThird= [X X(:,2).^2 X(:,2).^3];
+% thetaThird= (XThird' * XThird)\ XThird' * Y; % ignoring the cross terms
+% % % training error
+% YhatThird= XThird*thetaThird;
+% RMSErrorThird= sqrt(1/m *sum((YhatThird - Y).^2));
+% costLinearThird= (Y-YhatThird)' * (Y - YhatThird); % Cost function \ Squared Error
+% plot(X(:,2),Y, 'O')
+% hold on;
+% plot(X,YhatThird)
+
+%% Tenth Order
+% XTenth= [X X(:,2).^2 X(:,2).^3 X(:,2).^4 X(:,2).^5 X(:,2).^6 X(:,2).^7 X(:,2).^8 X(:,2).^9 X(:,2).^10];
+% thetaTenth= (XTenth' * XTenth)\ XTenth' * Y;
+% % % training error
+% YhatTenth= XTenth*thetaTenth;
+% RMSErrorTenth= sqrt(1/m * sum((YhatTenth - Y).^2));
+% costLinearTenth= (Y-YhatTenth)' * (Y - YhatTenth); % Cost function \ Squared Error
+% 
+% plot(X(:,2),Y, 'O')
+% hold on;
+% plot(X,YhatTenth)
+%% Fifteenth order
+% XFifteenth= [X X(:,2).^2 X(:,2).^3 X(:,2).^4 X(:,2).^5 X(:,2).^6 X(:,2).^7 X(:,2).^8 X(:,2).^9 X(:,2).^10 X(:,2).^11 X(:,2).^12 X(:,2).^13 X(:,2).^14 X(:,2).^15];
+% thetaFifteenth= (XFifteenth' * XFifteenth)\ XFifteenth' * Y;
+% % % training error
+% YhatFifteenth= XFifteenth*thetaFifteenth;
+% RMSErrorFifteenth= sqrt(1/m * sum((YhatFifteenth - Y).^2));
+% costLinearFifteenth= (Y-YhatFifteenth)' * (Y - YhatFifteenth); % Cost function \ Squared Error
+% 
+% plot(X(:,2),Y, 'O')
+% hold on;
+% plot(X,YhatFifteenth)
+
+%% Lasso regression is a regularized regression technique using L1 norm on thetas to make some of them exactly zero
+%% Lasso on fifteenth order
+% delta= 0.001;
+% thetaLasso=lassoFunction(XFifteenth,Y,delta);
+% YhatFifteenthLasso= XFifteenth*thetaLasso;
+% costFifteenthLassoReg= (Y-YhatFifteenthLasso)' * (Y- YhatFifteenthLasso) + delta^2 * norm(thetaLasso,1);
+
+%% Cross Validation on training and choosing the lasso delta estimator which gives least average error
+% tempCost=1;
+% deltaTemp=0;
+% totalTempCost=0;
+% for deltaValue=0.001:0.001:0.1,
+%     for k=1:10,
+%         [sample,idx]=datasample(XFifteenth,size(XFifteenth,1)/2);
+%         Xtemp=XFifteenth(setdiff(1:size(XFifteenth,1),idx),:);
+%         Ytemp=Y(setdiff(1:size(XFifteenth,1),idx),:);
+%         thetaLassoTemp= lassoFunction(Xtemp,Ytemp,deltaValue);
+%         YhatLassoTemp= sample*thetaLassoTemp;
+%         costLassoTempTest= (Y(idx,:)-YhatLassoTemp)' * (Y(idx,:)- YhatLassoTemp) + (deltaValue^2) *  norm(thetaLassoTemp,1);
+%         totalTempCost=totalTempCost+costLassoTempTest; 
+%     end
+%         avgTempCost=totalTempCost/10;
+%         if avgTempCost<tempCost
+%             deltaTemp=deltaValue;
+%             tempCost=avgTempCost;
+%         end
+%     
+% end
+
+
+
+
